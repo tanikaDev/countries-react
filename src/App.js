@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
 
-function App() {
+import './App.css';
+import Header from "./Header"
+import Main from "./Main"
+import CountryPage from "./CountryPage"
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
+import styled, { ThemeProvider } from "styled-components" 
+import { lightMode, darkMode, GlobalStyles} from "./Themes"
+
+const StyledApp = styled.div``;
+
+  function App() {
+    const [theme, setTheme] = useState("light")
+    const handleClick = () => {
+      theme === "light" ? setTheme("dark") : setTheme("light")
+    }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+      <ThemeProvider theme={theme === "light" ? lightMode : darkMode}>
+        <GlobalStyles />
+        <StyledApp>
+        <Router>
+          <div className="container">
+            <Header theme={theme} modeChanger={ handleClick }/>
+            <Switch>
+              <Route path="/" exact>
+                <Main />
+              </Route>
+              <Route path="/CountryPage/:name" component={CountryPage} />
+            </Switch>
+          </div>
+        </Router>
+        </StyledApp>
+      </ThemeProvider>
+    
+    
   );
 }
 
